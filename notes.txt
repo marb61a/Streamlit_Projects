@@ -1,0 +1,18 @@
+Streamlit Projects Notes
+
+Installation 
+    - https://streamlit.io/
+    - To Install and run
+        - pip install streamlit
+            - Will need to use pipenv command for installing into a virtual environment
+            - This will generate a pipfile which lists installed packages and can be used for install projects elsewhere
+                - https://github.com/pypa/pipfile
+        - streamlit hello
+
+
+- Based on several sources including 
+    - https://www.udemy.com/course/learn-streamlit-python/
+
+Basics
+    -
+    
