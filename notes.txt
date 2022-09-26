@@ -7,12 +7,28 @@ Installation
             - Will need to use pipenv command for installing into a virtual environment
             - This will generate a pipfile which lists installed packages and can be used for install projects elsewhere
                 - https://github.com/pypa/pipfile
-        - streamlit hello
+            - https://pipenv-fork.readthedocs.io/en/latest/basics.html
+        - streamlit hello runs the initial installation
+    - Activate the virtual environment
+        - Type the pipenv activate command into the shell in the appropriate folder
+    - To update streamlit use the following
+        - pip install streamlit -U
+    - To check which version of streamlit is being used
+        - streamlit --version
+    - To stop the framework running simply use ctrl+c
 
 
 - Based on several sources including 
     - https://www.udemy.com/course/learn-streamlit-python/
 
 Basics
-    -
-    
+    - To run streamlit form a command line
+        - streamlit run <filename>
+    - This should run a new browser tab on port http://localhost:8501/
+    - On saving a changed file streamlit gives the opportunity to always rerun the file
+        - This should be taken as most files will need to be rerun to display changes 
+    - Streamlit generates html which can be inspected in the browser tools
+        - It also styles some text such as warnings or errors etc similar to the CSS bootstrap framework does
+    - Pandas dataframes can be bought into a file and displayed in a variety of ways
+        - The pandas framework does still need to be imported though
+    - 
