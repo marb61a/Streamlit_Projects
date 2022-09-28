@@ -1,24 +1,17 @@
 # Core packages
 import streamlit as st
 
-# Text input
-fname = st.text_input("Enter Firstname", max_chars=10)
-st.title(fname)
+# Configuring page, this must be the first activity of streamlit
+# Emojis can also be added directly, some work however some may not
+# Sidebars can also be added with different state for example some may want the 
+# sidebar collapsed. There is also a second method which may be used to configure a page and
+# that is to use a dictionary to pass in various options
+st.set_page_config(page_title='hello', page_icon=':smiley:', Layout='wide', initial_sidebar_state='collapsed')
 
-# Text area
-message = st.text_area("Enter Message")
-st.write(message)
+# Functions
+def main():
+    st.title("Hi streamlit")
+    st.sidebar.success("Menu")
 
-# Number input
-# Can be floating point numbers and can be added to so the
-# number increases in set stages eg 5
-number = st.number_input("Enter Number", 1, 25)
-
-# Date Input
-my_appointment = st.date_input("Appointment")
-
-# Time Input
-my_time = st.time_input("My Time")
-
-# Color Picker
-color = st.color_picker("Select color")
+if __name__ == '__main__':
+    main()
