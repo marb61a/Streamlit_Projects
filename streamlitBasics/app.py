@@ -1,17 +1,19 @@
 # Core packages
 import streamlit as st
 
-# Configuring page, this must be the first activity of streamlit
-# Emojis can also be added directly, some work however some may not
-# Sidebars can also be added with different state for example some may want the 
-# sidebar collapsed. There is also a second method which may be used to configure a page and
-# that is to use a dictionary to pass in various options
-st.set_page_config(page_title='hello', page_icon=':smiley:', Layout='wide', initial_sidebar_state='collapsed')
+# Load EDA packages
+import pandas as pd
+import numpy as np
+
+# Load data visualisation packages
+import plotly.express as px
+
 
 # Functions
 def main():
-    st.title("Hi streamlit")
-    st.sidebar.success("Menu")
+    st.title("Working with Plotly in Streamlit")
+    df = pd.read_csv("./diabetes_data_upload.csv")
+    st.dataframe(df)
 
 if __name__ == '__main__':
     main()
