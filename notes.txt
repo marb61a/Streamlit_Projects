@@ -32,3 +32,14 @@ Basics
     - Pandas dataframes can be bought into a file and displayed in a variety of ways
         - The pandas framework does still need to be imported though
     - 
+
+Packages
+    - Gensim which is in the summarization app no longer supports summarization
+    - Any version from 4.x.x onwards will need to be rolled back
+    - To check the gensim version simply use the following command
+        - pip show gensim
+    - After checking then use the following command to uninstall if the version is higher than 4
+        - pip uninstall gensim 
+    - To then install a specific version use the following command
+        - pip install gensim==3.8.3
+    -
