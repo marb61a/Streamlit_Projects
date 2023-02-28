@@ -3,7 +3,8 @@ import streamlit as st
 
 # Any additional packages
 # TextRank Algorithm
-from gensim.summarization import summarize
+# gensim 4+ no longer supports the summarization module
+from gensim.summarization import summarizer
 
 # LexRank Algorithm
 from sumy.parsers.plaintext import PlaintextParser
@@ -13,11 +14,23 @@ from sumy.summarizers.lex_rank import LexRankSummarizer
 # EDA Pakages
 import pandas as pd
 
-# data Visualisation
+# Data Visualisation
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
 matplotlib.use("Agg")
+
+# Evaluate Summary
+from rouge import Rouge
+
+def evaluate_summary(summary, reference):
+    r = Rouge()
+    eval_score = r.get_scores(summary, reference)
+
+    # Create a datframe for evaluation scores
+    # eval_score_df = pd.DataFrame(eval_score[0])
+
+    return eval_score
 
 # Function for Sumy Summarization
 def sumy_summarizer(docx, num=2):
@@ -53,11 +66,22 @@ def main():
                 with st.beta_expander("LexRank Summary"):
                     my_summary = sumy_summarizer(raw_text)
                     st.write(my_summary)
+
+                    st.info("Rouge Score")
+                    score = evaluate_summary(my_summary, raw_text)
+                    
+                    # st.write(score)
+                    st.dataframe(score)
                     
             with c2:
                 with st.beta_expander("TextRank Summary"):
                     my_summary = summarize(raw_text)
-                    st.write(my_summary)    
+                    st.write(my_summary)
+
+                    st.info("Rouge Score")
+                    score = evaluate_summary(my_summary, raw_text)                  
+                    # st.write(score)
+                    st.dataframe(score) 
             
     else:
         st.subheader("About")
