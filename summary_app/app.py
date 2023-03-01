@@ -16,9 +16,11 @@ import pandas as pd
 
 # Data Visualisation
 import matplotlib.pyplot as plt
-import seaborn as sns
 import matplotlib
 matplotlib.use("Agg")
+
+import seaborn as sns
+import altair as alt
 
 # Evaluate Summary
 from rouge import Rouge
@@ -65,24 +67,35 @@ def main():
             with c1:
                 with st.beta_expander("LexRank Summary"):
                     my_summary = sumy_summarizer(raw_text)
+                    document_len = {"Original":len(raw_text), 
+                                    "Summary":len(my_summary)}
+                    st.wrtie(document_len)
                     st.write(my_summary)
 
                     st.info("Rouge Score")
-                    score = evaluate_summary(my_summary, raw_text)
+                    eval_df = evaluate_summary(my_summary, raw_text)
                     
                     # st.write(score)
-                    st.dataframe(score)
+                    st.dataframe(eval_df.T)
+                    eval_df['metrics'] = eval_df.index
+                    c = alt.Chart(eval_df).mark_bar().encode(x='metrics',y='rouge-1')
+                    st.altair_chart(c)
                     
             with c2:
                 with st.beta_expander("TextRank Summary"):
+                    document_len = {"Original":len(raw_text), 
+                                    "Summary":len(my_summary)}
                     my_summary = summarize(raw_text)
+                    st.write(document_len)
                     st.write(my_summary)
 
                     st.info("Rouge Score")
-                    score = evaluate_summary(my_summary, raw_text)                  
+                    eval_df = evaluate_summary(my_summary, raw_text)                  
                     # st.write(score)
-                    st.dataframe(score) 
-            
+                    st.dataframe(eval_df) 
+
+                    c = alt.Chart(eval_df).mark_bar().encode(x='metrics',y='rouge-1')
+                    st.altair_chart(c)
     else:
         st.subheader("About")
 
