@@ -24,7 +24,34 @@ def main():
         if st.button("Analyse"):
             with st.beta_expander("Original Text"):
                 st.write(raw_text)
-                
+
+            with st.beta_expander("Text Analysis"):
+                st.write(raw_text)
+            
+            with st.beta_expander("Entities"):
+                st.write(raw_text)
+            
+            # Layouts
+            col1,col2 = st.beta_columns(2)
+            with col1:
+                with st.beta_expander("World Stats"):
+                    pass
+                with st.beta_expander("Top Keywords"):
+                    pass
+                with st.beta_expander("Sentiment"):
+                    pass
+            
+            with col2:
+                with st.beta_expander("Plot Word Freq"):
+                    pass
+                with st.beta_expander("Plot Part of Speech"):
+                    pass
+                with st.beta_expander("Plot Wordcloud"):
+                    pass
+            
+            with st.beta_expander("Download Text Analysis Results"):
+                pass
+
     elif choice == "NLP(files)":
         st.subheader("NLP Task")
     else:
