@@ -7,6 +7,7 @@
     - matplotlib
     - seaborn
     - spacy
+        python -m spacy download en
     - textblob
     - neattext
   

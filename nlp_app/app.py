@@ -2,6 +2,21 @@
 import streamlit as st
 
 # Additional Packages
+# Import EDA packages
+import pandas as pd
+
+# Import NLP Packages
+import spacy
+nlp = spacy.load('en')
+
+# Import Text Cleaning Packages
+import neattext as nt
+import neattext.functions as nfx
+
+# Functions
+def text_analyzer(my_text):
+    docx = nlp(my_text)
+
 def main():
     st.title("NLP Streamlit App")
 
@@ -22,34 +37,36 @@ def main():
 
         # Add button under text area
         if st.button("Analyse"):
-            with st.beta_expander("Original Text"):
+            # beta_expander has moved out of beta so becomes expander
+            with st.expander("Original Text"):
                 st.write(raw_text)
 
-            with st.beta_expander("Text Analysis"):
+            with st.expander("Text Analysis"):
                 st.write(raw_text)
             
-            with st.beta_expander("Entities"):
+            with st.expander("Entities"):
                 st.write(raw_text)
             
             # Layouts
-            col1,col2 = st.beta_columns(2)
+            # columns has moved out of beta
+            col1,col2 = st.columns(2)
             with col1:
-                with st.beta_expander("World Stats"):
+                with st.expander("World Stats"):
                     pass
-                with st.beta_expander("Top Keywords"):
+                with st.expander("Top Keywords"):
                     pass
-                with st.beta_expander("Sentiment"):
+                with st.expander("Sentiment"):
                     pass
             
             with col2:
-                with st.beta_expander("Plot Word Freq"):
+                with st.expander("Plot Word Freq"):
                     pass
-                with st.beta_expander("Plot Part of Speech"):
+                with st.expander("Plot Part of Speech"):
                     pass
-                with st.beta_expander("Plot Wordcloud"):
+                with st.expander("Plot Wordcloud"):
                     pass
             
-            with st.beta_expander("Download Text Analysis Results"):
+            with st.expander("Download Text Analysis Results"):
                 pass
 
     elif choice == "NLP(files)":
