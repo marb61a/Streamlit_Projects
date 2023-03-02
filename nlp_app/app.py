@@ -17,6 +17,25 @@ import neattext.functions as nfx
 def text_analyzer(my_text):
     docx = nlp(my_text)
 
+    allData = [(token.text, token.shape, token.tag, token.lemma, token.is_alpha, token.is_stopword)]
+    df = pd.DataFrame(allData, columns=['Token', 'Shape', 'PoS', 'Tag', 'Lemma', 'IsAlpha', 'Is_Stopword'])
+
+    return df
+
+def get_entities(my_text):
+    docx = nlp(my_text)
+    entities = [(entity.text, entity.label) for entity in docx.ents]
+
+    return entities
+
+HTML_WRAPPER = """
+    <div style="overflow-x: auto"; border: 1px solid #e6e9ef; border-radius: 1px;></div>
+"""
+
+def render_entities(rawtext):
+    docx = nlp(rawtext)
+    html = displacy 
+
 def main():
     st.title("NLP Streamlit App")
 
@@ -42,10 +61,12 @@ def main():
                 st.write(raw_text)
 
             with st.expander("Text Analysis"):
-                st.write(raw_text)
+                token_result_df = text_analyzer(raw_text)
+                st.dataframe(token_result_df)
             
             with st.expander("Entities"):
-                st.write(raw_text)
+                entity_result = get_entities(raw_text)
+                st.write(entity_result)
             
             # Layouts
             # columns has moved out of beta
