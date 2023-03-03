@@ -47,7 +47,7 @@ def render_entities(rawtext):
 
 # Get the most common tokens
 def get_most_common_tokens(my_text, num=4):
-    word_tokens = Counter(my_text.split(''))
+    word_tokens = Counter(my_text.split())
     most_common_tokens = word_tokens.most_common(num)
 
     return most_common_tokens
@@ -93,7 +93,10 @@ def main():
                     docx = nt.TextFrame(raw_text)
                     st.write(docx.word_stats())
                 with st.expander("Top Keywords"):
-                    pass
+                    st.info("Top Keywords/Tokens")
+                    processed_text = nfx.remove_stopwords(raw_text)
+                    Keywords = get_most_common_tokens(processed_text)
+                    st.write(Keywords)
                 with st.expander("Sentiment"):
                     pass
             
