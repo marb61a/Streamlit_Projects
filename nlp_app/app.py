@@ -1,5 +1,6 @@
 # Core Package
 import streamlit as st
+import streamlit.components.v1 as stc
 
 # Additional Packages
 # Import EDA packages
@@ -8,10 +9,14 @@ import pandas as pd
 # Import NLP Packages
 import spacy
 nlp = spacy.load('en')
+from spacy import displacy
 
 # Import Text Cleaning Packages
 import neattext as nt
 import neattext.functions as nfx
+
+# Import utilities
+from collections import Counter
 
 # Functions
 def text_analyzer(my_text):
@@ -34,7 +39,18 @@ HTML_WRAPPER = """
 
 def render_entities(rawtext):
     docx = nlp(rawtext)
-    html = displacy 
+    html = displacy.render(docx, style="ent") 
+    html = html.replace("\n\n", "\n")
+    result = HTML_WRAPPER.format(html)
+
+    return result
+
+# Get the most common tokens
+def get_most_common_tokens(my_text, num=4):
+    word_tokens = Counter(my_text.split(''))
+    most_common_tokens = word_tokens.most_common(num)
+
+    return most_common_tokens
 
 def main():
     st.title("NLP Streamlit App")
@@ -65,15 +81,17 @@ def main():
                 st.dataframe(token_result_df)
             
             with st.expander("Entities"):
-                entity_result = get_entities(raw_text)
-                st.write(entity_result)
+                entity_result = render_entities(raw_text)
+                stc.html(entity_result, height=1000,scrolling=True) 
             
             # Layouts
             # columns has moved out of beta
             col1,col2 = st.columns(2)
             with col1:
                 with st.expander("World Stats"):
-                    pass
+                    st.info("Word Statistics")
+                    docx = nt.TextFrame(raw_text)
+                    st.write(docx.word_stats())
                 with st.expander("Top Keywords"):
                     pass
                 with st.expander("Sentiment"):
