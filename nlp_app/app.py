@@ -10,6 +10,7 @@ import pandas as pd
 import spacy
 nlp = spacy.load('en')
 from spacy import displacy
+from spacy import tokens
 
 from textblob import TextBlob
 
@@ -26,11 +27,14 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
 
+# Import Wordcloud
+from wordcloud import WordCloud
+
 # Functions
 def text_analyzer(my_text):
     docx = nlp(my_text)
 
-    allData = [(token.text, token.shape, token.tag, token.lemma, token.is_alpha, token.is_stopword)]
+    allData = [(tokens.text, tokens.shape, tokens.tag, tokens.lemma, tokens.is_alpha, tokens.is_stopword)]
     df = pd.DataFrame(allData, columns=['Token', 'Shape', 'PoS', 'Tag', 'Lemma', 'IsAlpha', 'Is_Stopword'])
 
     return df
@@ -54,7 +58,7 @@ def render_entities(rawtext):
     return result
 
 # Get the most common tokens
-def get_most_common_tokens(my_text, num=4):
+def get_most_common_tokens(my_text, num=5):
     word_tokens = Counter(my_text.split())
     most_common_tokens = word_tokens.most_common(num)
 
@@ -66,6 +70,13 @@ def get_sentiment(my_text):
     sentiment = blob.sentiment
 
     return sentiment
+
+# Generate wordcloud
+def plot_wordcloud(my_text):
+    my_wordcloud = WordCloud().generate(my_text)
+    fig = plt.figure()
+    plt.imshow(my_wordcloud, interpolation='bilinear')
+    st.pyplot(fig)
 
 def main():
     st.title("NLP Streamlit App")
@@ -111,8 +122,8 @@ def main():
                 with st.expander("Top Keywords"):
                     st.info("Top Keywords/Tokens")
                     processed_text = nfx.remove_stopwords(raw_text)
-                    Keywords = get_most_common_tokens(processed_text)
-                    st.write(Keywords)
+                    keywords = get_most_common_tokens(processed_text)
+                    st.write(keywords)
 
                 with st.expander("Sentiment"):
                     sent_result = get_sentiment(raw_text)
@@ -121,16 +132,21 @@ def main():
             with col2:
                 with st.expander("Plot Word Freq"):
                     fig = plt.figure()
-                    sns.countplot(token_result_df['PWF'])
+                    top_keywords = get_most_common_tokens(processed_text, num_of_most_common)
+                    plt.bar(keywords.keys(), top_keywords.values())
+                    # Rotates the x-axis valus to help with displaying
+                    plt.xticks(rotation=45)
                     st.pyplot()
 
                 with st.expander("Plot Part of Speech"):
                     fig = plt.figure()
                     sns.countplot(token_result_df['PoS'])
+                    # Rotates the x-axis valus to help with displaying
+                    plt.xticks(rotation=45)
                     st.pyplot(fig)
 
                 with st.expander("Plot Wordcloud"):
-                    pass
+                    plot_wordcloud(raw_text)
             
             with st.expander("Download Text Analysis Results"):
                 pass

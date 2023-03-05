@@ -9,7 +9,9 @@
     - spacy
         python -m spacy download en
     - textblob
+        pip install textblob
     - neattext
+    - wordcloud
   
 + File Processing
     - docx2txt
