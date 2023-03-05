@@ -20,6 +20,9 @@ import neattext.functions as nfx
 
 # Import utilities
 from collections import Counter
+import base64
+import time
+timestr = time.strftime("%Y%m%d-%H%M%S")
 
 # Import Data Visualization Packages
 import seaborn as sns
@@ -46,7 +49,7 @@ def get_entities(my_text):
     return entities
 
 HTML_WRAPPER = """
-    <div style="overflow-x: auto"; border: 1px solid #e6e9ef; border-radius: 1px;></div>
+    <div style="overflow-x: auto; border: 1px solid #e6e9ef; border-radius: 1px; padding: 1rem"></div>
 """
 
 def render_entities(rawtext):
@@ -76,7 +79,17 @@ def plot_wordcloud(my_text):
     my_wordcloud = WordCloud().generate(my_text)
     fig = plt.figure()
     plt.imshow(my_wordcloud, interpolation='bilinear')
+    plt.axis("off")
     st.pyplot(fig)
+
+# Download results as a file
+def make_downloadable(data):
+    csvfile = data.to_csv(index=False)
+    b64 = base64.b64encode(csvfile.encode()).decode()
+    new_filename = 'nlp_result_{}_.csv'.format(timestr)
+    st.markdown('Download CSV file')
+    href = f'<a href="data:file/csv;base64,{b64}" download="{new_filename}">Click here!</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
 def main():
     st.title("NLP Streamlit App")
@@ -149,10 +162,17 @@ def main():
                     plot_wordcloud(raw_text)
             
             with st.expander("Download Text Analysis Results"):
-                pass
+                make_downloadable(token_result_df)
 
     elif choice == "NLP(files)":
         st.subheader("NLP Task")
+
+        # Add file uploader and the type of files that can be uploaded
+        text_file = st.file_uploader("Upload Files", type=['pdf', 'docx', 'txt'])
+        if text_file is not None:
+            if text_file.type == 'application/pdf':
+                pass
+
     else:
         st.subheader("About")
 
