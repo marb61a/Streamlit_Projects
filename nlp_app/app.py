@@ -11,12 +11,20 @@ import spacy
 nlp = spacy.load('en')
 from spacy import displacy
 
+from textblob import TextBlob
+
 # Import Text Cleaning Packages
 import neattext as nt
 import neattext.functions as nfx
 
 # Import utilities
 from collections import Counter
+
+# Import Data Visualization Packages
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")
 
 # Functions
 def text_analyzer(my_text):
@@ -51,6 +59,13 @@ def get_most_common_tokens(my_text, num=4):
     most_common_tokens = word_tokens.most_common(num)
 
     return most_common_tokens
+
+# Get the sentiment
+def get_sentiment(my_text):
+    blob = TextBlob(my_text)
+    sentiment = blob.sentiment
+
+    return sentiment
 
 def main():
     st.title("NLP Streamlit App")
@@ -92,19 +107,28 @@ def main():
                     st.info("Word Statistics")
                     docx = nt.TextFrame(raw_text)
                     st.write(docx.word_stats())
+
                 with st.expander("Top Keywords"):
                     st.info("Top Keywords/Tokens")
                     processed_text = nfx.remove_stopwords(raw_text)
                     Keywords = get_most_common_tokens(processed_text)
                     st.write(Keywords)
+
                 with st.expander("Sentiment"):
-                    pass
+                    sent_result = get_sentiment(raw_text)
+                    st.write(sent_result)
             
             with col2:
                 with st.expander("Plot Word Freq"):
-                    pass
+                    fig = plt.figure()
+                    sns.countplot(token_result_df['PWF'])
+                    st.pyplot()
+
                 with st.expander("Plot Part of Speech"):
-                    pass
+                    fig = plt.figure()
+                    sns.countplot(token_result_df['PoS'])
+                    st.pyplot(fig)
+
                 with st.expander("Plot Wordcloud"):
                     pass
             
