@@ -108,6 +108,11 @@ def read_pdf(file):
     
     return all_page_text
 
+def read_pdf2(file):
+    with pdfplumber.open(file) as pdf:
+        page = pdf.pages[0]
+        return page.extract_text()
+
 def main():
     st.title("NLP Streamlit App")
 
@@ -188,7 +193,8 @@ def main():
         text_file = st.file_uploader("Upload Files", type=['pdf', 'docx', 'txt'])
         if text_file is not None:
             if text_file.type == 'application/pdf':
-                pass
+                raw_text = read_pdf(text_file)
+                st.write(raw_text)
             elif text_file.type == 'text/plain':
                 # This will be read in as bytes
                 # st.write(text_file.read())
@@ -197,6 +203,59 @@ def main():
             else:
                 raw_text = docx2txt.process(text_file)
                 st.write(raw_text)
+
+                # beta_expander has moved out of beta so becomes expander
+                with st.expander("Original Text"):
+                    st.write(raw_text)
+
+                with st.expander("Text Analysis"):
+                    token_result_df = text_analyzer(raw_text)
+                    st.dataframe(token_result_df)
+                
+                with st.expander("Entities"):
+                    entity_result = render_entities(raw_text)
+                    stc.html(entity_result, height=1000,scrolling=True) 
+                
+                # Layouts
+                # columns has moved out of beta
+                col1,col2 = st.columns(2)
+                with col1:
+                    with st.expander("World Stats"):
+                        st.info("Word Statistics")
+                        docx = nt.TextFrame(raw_text)
+                        st.write(docx.word_stats())
+
+                    with st.expander("Top Keywords"):
+                        st.info("Top Keywords/Tokens")
+                        processed_text = nfx.remove_stopwords(raw_text)
+                        keywords = get_most_common_tokens(processed_text)
+                        st.write(keywords)
+
+                    with st.expander("Sentiment"):
+                        sent_result = get_sentiment(raw_text)
+                        st.write(sent_result)
+                
+                with col2:
+                    with st.expander("Plot Word Freq"):
+                        fig = plt.figure()
+                        top_keywords = get_most_common_tokens(processed_text, num_of_most_common)
+                        plt.bar(keywords.keys(), top_keywords.values())
+                        # Rotates the x-axis valus to help with displaying
+                        plt.xticks(rotation=45)
+                        st.pyplot()
+
+                    with st.expander("Plot Part of Speech"):
+                        fig = plt.figure()
+                        sns.countplot(token_result_df['PoS'])
+                        # Rotates the x-axis valus to help with displaying
+                        plt.xticks(rotation=45)
+                        st.pyplot(fig)
+
+                    with st.expander("Plot Wordcloud"):
+                        plot_wordcloud(raw_text)
+                
+                with st.expander("Download Text Analysis Results"):
+                    make_downloadable(token_result_df)
 
     else:
         st.subheader("About")
