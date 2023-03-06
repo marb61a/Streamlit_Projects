@@ -33,6 +33,11 @@ matplotlib.use("Agg")
 # Import Wordcloud
 from wordcloud import WordCloud
 
+# File Processing Packages
+import docx2txt
+import pdfplumber
+from PyPDF2 import PdfFileReader
+
 # Functions
 def text_analyzer(my_text):
     docx = nlp(my_text)
@@ -90,6 +95,18 @@ def make_downloadable(data):
     st.markdown('Download CSV file')
     href = f'<a href="data:file/csv;base64,{b64}" download="{new_filename}">Click here!</a>'
     st.markdown(href, unsafe_allow_html=True)
+
+# Read PDF functions
+def read_pdf(file):
+    pdfReader = PdfFileReader(file)
+    count = pdfReader.numPages
+    all_page_text = ""
+
+    for i in range(count):
+        page = pdfReader.getPage(i)
+        all_page_text += page.extractText()
+    
+    return all_page_text
 
 def main():
     st.title("NLP Streamlit App")
@@ -172,6 +189,14 @@ def main():
         if text_file is not None:
             if text_file.type == 'application/pdf':
                 pass
+            elif text_file.type == 'text/plain':
+                # This will be read in as bytes
+                # st.write(text_file.read())
+                raw_text = str(text_file.read(), 'utf-8')
+                st.write(raw_text)
+            else:
+                raw_text = docx2txt.process(text_file)
+                st.write(raw_text)
 
     else:
         st.subheader("About")
