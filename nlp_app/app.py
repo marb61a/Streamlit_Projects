@@ -149,7 +149,7 @@ def main():
             # columns has moved out of beta
             col1,col2 = st.columns(2)
             with col1:
-                with st.expander("World Stats"):
+                with st.expander("Word Stats"):
                     st.info("Word Statistics")
                     docx = nt.TextFrame(raw_text)
                     st.write(docx.word_stats())
@@ -157,7 +157,7 @@ def main():
                 with st.expander("Top Keywords"):
                     st.info("Top Keywords/Tokens")
                     processed_text = nfx.remove_stopwords(raw_text)
-                    keywords = get_most_common_tokens(processed_text)
+                    keywords = get_most_common_tokens(processed_text, num_of_most_common)
                     st.write(keywords)
 
                 with st.expander("Sentiment"):
@@ -171,7 +171,7 @@ def main():
                     plt.bar(keywords.keys(), top_keywords.values())
                     # Rotates the x-axis valus to help with displaying
                     plt.xticks(rotation=45)
-                    st.pyplot()
+                    st.pyplot(fig)
 
                 with st.expander("Plot Part of Speech"):
                     fig = plt.figure()
@@ -194,12 +194,10 @@ def main():
         if text_file is not None:
             if text_file.type == 'application/pdf':
                 raw_text = read_pdf(text_file)
-                st.write(raw_text)
+                # st.write(raw_text)
             elif text_file.type == 'text/plain':
-                # This will be read in as bytes
-                # st.write(text_file.read())
                 raw_text = str(text_file.read(), 'utf-8')
-                st.write(raw_text)
+                # st.write(raw_text)
             else:
                 raw_text = docx2txt.process(text_file)
                 st.write(raw_text)
@@ -228,7 +226,7 @@ def main():
                     with st.expander("Top Keywords"):
                         st.info("Top Keywords/Tokens")
                         processed_text = nfx.remove_stopwords(raw_text)
-                        keywords = get_most_common_tokens(processed_text)
+                        keywords = get_most_common_tokens(processed_text, num_of_most_common)
                         st.write(keywords)
 
                     with st.expander("Sentiment"):
@@ -242,7 +240,7 @@ def main():
                         plt.bar(keywords.keys(), top_keywords.values())
                         # Rotates the x-axis valus to help with displaying
                         plt.xticks(rotation=45)
-                        st.pyplot()
+                        st.pyplot(fig)
 
                     with st.expander("Plot Part of Speech"):
                         fig = plt.figure()

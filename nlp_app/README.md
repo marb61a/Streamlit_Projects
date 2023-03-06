@@ -17,3 +17,16 @@
     - docx2txt
     - pyPDF2
     - pdfplumber
+
+### Refactoring and Restructuring
+
++ radon
+    - Used for static code analysis
+    - Multiple metrics available including raw metrics and Halstead metrics
+    - pip install radon
++ black
+  - Used for code formatting
+  - pip install black
++ vulture
+  - Removes unused imports
+  - pip install vulture
